@@ -1,30 +1,17 @@
-import { ApiError, type ApiProblemDetails } from "./errors";
-
-function getBaseUrl(): string {
-  const baseUrl = process.env.APPLYVAULT_API_BASE_URL;
-  if (!baseUrl) {
-    throw new Error("Missing env var APPLYVAULT_API_BASE_URL");
-  }
-  return baseUrl.replace(/\/$/, "");
-}
+import { getApiBaseUrl } from "./env";
+import { ApiError, ApiProblemDetails } from "./errors";
 
 async function readProblemDetailsSafe(
   res: Response,
 ): Promise<ApiProblemDetails | undefined> {
-  const contentType = res.headers.get("content-type") ?? "";
-  if (!contentType.includes("application/json")) return undefined;
-
   try {
-    const json = (await res.json()) as unknown;
-    if (json && typeof json === "object") return json as ApiProblemDetails;
+    return (await res.json()) as ApiProblemDetails;
   } catch {
-    // ignore
+    return undefined;
   }
-  return undefined;
 }
 
-type FetchJsonOptions = RequestInit & {
-  // Next.js caching controls
+export type FetchJsonOptions = RequestInit & {
   next?: { revalidate?: number; tags?: string[] };
 };
 
@@ -32,28 +19,28 @@ export async function fetchJson<T>(
   path: string,
   options: FetchJsonOptions = {},
 ): Promise<T> {
-  const url = `${getBaseUrl()}${path.startsWith("/") ? "" : "/"}${path}`;
+  const baseUrl = getApiBaseUrl();
+  const url = new URL(path, baseUrl).toString();
 
-  const res = await fetch(url, {
-    ...options,
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      ...(options.headers ?? {}),
-    },
-  });
-
-  if (!res.ok) {
-    const problem = await readProblemDetailsSafe(res);
-    const msg =
-      problem?.title ||
-      problem?.detail ||
-      `Request failed: ${res.status} ${res.statusText}`;
-    throw new ApiError(msg, res.status, problem);
+  const headers = new Headers(options.headers || {});
+  if (!headers.has("Accept")) {
+    headers.set("Accept", "application/json");
+  }
+  if (options.body && !headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
   }
 
-  // 204 No Content handling (I do not have 204 responses on the backend that this app hits, but this is just in case)
-  if (res.status === 204) return undefined as T;
+  const response = await fetch(url, {
+    ...options,
+    headers,
+  });
 
-  return (await res.json()) as T;
+  if (!response.ok) {
+    const problem = await readProblemDetailsSafe(response);
+    const message =
+      problem?.title || problem?.detail || `HTTP ${response.status}`;
+    throw new ApiError(message, response.status, problem);
+  }
+
+  return response.json() as Promise<T>;
 }
