@@ -76,21 +76,12 @@ export default async function JobApplicationDetailsPage({ params }: Props) {
           )}
 
           <Stack direction="row" spacing={1} sx={{ pt: 1 }}>
-            <Button
-              component={Link}
-              href="/job-applications"
-              variant="outlined"
-            >
-              Back
-            </Button>
-            {/* We'll add Edit using server actions next */}
-            <Button
-              component={Link}
-              href={`/job-applications/${id}/edit`}
-              variant="contained"
-            >
-              Edit
-            </Button>
+            <Link href="/job-applications">
+              <Button variant="outlined">Back</Button>
+            </Link>
+            <Link href={`/job-applications/${id}/edit`}>
+              <Button variant="contained">Edit</Button>
+            </Link>
           </Stack>
         </Stack>
       </Paper>

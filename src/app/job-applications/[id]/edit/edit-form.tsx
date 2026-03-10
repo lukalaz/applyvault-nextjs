@@ -199,14 +199,11 @@ export default function JobApplicationEditPageContent({ item, id }: Props) {
             />
 
             <Stack direction="row" spacing={1}>
-              <Button
-                variant="outlined"
-                component={Link}
-                href={`/job-applications/${id}`}
-                disabled={isSubmitting}
-              >
-                Cancel
-              </Button>
+              <Link href={`/job-applications/${id}`}>
+                <Button variant="outlined" disabled={isSubmitting}>
+                  Cancel
+                </Button>
+              </Link>
               <Button variant="contained" type="submit" disabled={isSubmitting}>
                 {isSubmitting ? "Saving..." : "Save Changes"}
               </Button>

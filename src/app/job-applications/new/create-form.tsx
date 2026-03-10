@@ -150,14 +150,11 @@ export default function JobApplicationCreateForm() {
               disabled={isSubmitting}
             />
             <Stack direction="row" spacing={1}>
-              <Button
-                variant="outlined"
-                component={Link}
-                href="/job-applications"
-                disabled={isSubmitting}
-              >
-                Cancel
-              </Button>
+              <Link href="/job-applications">
+                <Button variant="outlined" disabled={isSubmitting}>
+                  Cancel
+                </Button>
+              </Link>
               <Button variant="contained" type="submit" disabled={isSubmitting}>
                 {isSubmitting ? "Saving..." : "Create"}
               </Button>

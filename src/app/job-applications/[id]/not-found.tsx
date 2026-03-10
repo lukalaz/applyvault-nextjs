@@ -12,9 +12,9 @@ export default function NotFound() {
       </Typography>
 
       <Stack direction="row" spacing={1}>
-        <Button component={Link} href="/job-applications" variant="contained">
-          Back to list
-        </Button>
+        <Link href="/job-applications">
+          <Button variant="contained">Back to list</Button>
+        </Link>
       </Stack>
     </Container>
   );

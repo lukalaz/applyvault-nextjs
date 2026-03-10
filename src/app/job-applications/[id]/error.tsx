@@ -19,9 +19,9 @@ export default function JobApplicationDetailsError({
           Please try again or go back to the list.
         </Typography>
         <Stack direction="row" spacing={1}>
-          <Button variant="outlined" component={Link} href="/job-applications">
-            Back to List
-          </Button>
+          <Link href="/job-applications">
+            <Button variant="outlined">Back to List</Button>
+          </Link>
           <Button variant="contained" onClick={() => reset()}>
             Retry
           </Button>
