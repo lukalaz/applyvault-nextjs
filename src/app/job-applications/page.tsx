@@ -1,5 +1,12 @@
 import Link from "next/link";
-import { Container, Typography, Paper, Stack, Chip } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Stack,
+  Button,
+  Paper,
+  Chip,
+} from "@mui/material";
 import { getStatusLabel } from "@/domain/jobApplications";
 import { jobApplicationsApi } from "@/lib/api/jobApplications";
 
@@ -8,9 +15,14 @@ export default async function JobApplicationsPage() {
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Typography variant="h4" fontWeight={800} gutterBottom>
-        Job Applications
-      </Typography>
+      <Stack direction="row" justifyContent="space-between" sx={{ mb: 2 }}>
+        <Typography variant="h4" fontWeight={800}>
+          Job Applications
+        </Typography>
+        <Link href="/job-applications/new" passHref>
+          <Button variant="contained">New Application</Button>
+        </Link>
+      </Stack>
 
       <Stack spacing={2}>
         {items.map((x) => (
