@@ -1,6 +1,11 @@
 import { getApiBaseUrl } from "./env";
 import { ApiError, ApiProblemDetails } from "./errors";
 
+// Disable TLS certificate verification for local development with self-signed certs
+if (process.env.NODE_ENV === "development") {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+}
+
 async function readProblemDetailsSafe(
   res: Response,
 ): Promise<ApiProblemDetails | undefined> {
