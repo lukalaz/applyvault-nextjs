@@ -1,4 +1,3 @@
-// src/lib/api/mocks/mockLogin.ts
 import type {
   LoginErrorResponse,
   LoginRequest,
