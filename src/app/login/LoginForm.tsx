@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Alert, Box, Button, Stack, TextField } from "@mui/material";
-import type { LoginRequest } from "./login.types";
+import type { LoginRequest } from "@/lib/api/types/auth";
 
 type LoginFormProps = {
   onSubmit: (values: LoginRequest) => Promise<void>;
