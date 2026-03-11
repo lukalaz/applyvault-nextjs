@@ -40,7 +40,8 @@ export default function LoginPage() {
               Login
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Mock auth flow for frontend-first development.
+              A quick mock flow for login to demonstrate handling of API
+              responses before we have a real backend.
             </Typography>
           </div>
 
