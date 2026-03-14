@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { getStatusLabel } from "@/domain/jobApplications";
 import { jobApplicationsApi } from "@/lib/api/jobApplications";
+import DeleteButton from "./DeleteButton";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -82,6 +83,7 @@ export default async function JobApplicationDetailsPage({ params }: Props) {
             <Link href={`/job-applications/${id}/edit`}>
               <Button variant="contained">Edit</Button>
             </Link>
+            <DeleteButton id={id} />
           </Stack>
         </Stack>
       </Paper>

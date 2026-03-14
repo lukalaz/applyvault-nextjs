@@ -20,7 +20,7 @@ import {
   getStatusLabel,
   JobApplicationResponseDto,
 } from "@/domain/jobApplications";
-import { updateJobApplicationAction } from "./actions";
+import { updateJobApplicationAction } from "../../actions";
 import { useState } from "react";
 
 type Props = {
