@@ -27,8 +27,10 @@ export default function JobApplicationCreateForm() {
     setIsSubmitting(true);
     try {
       await createJobApplicationAction(formData);
-    } catch (e: any) {
-      setError(e.message || "An unexpected error occurred");
+    } catch (e: unknown) {
+      const message =
+        e instanceof Error ? e.message : "An unexpected error occurred";
+      setError(message);
     } finally {
       setIsSubmitting(false);
     }
