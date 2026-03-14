@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe, it, expect } from "vitest";
-import LoginForm from "../LoginForm";
+import LoginForm from "@/components/forms/LoginForm";
 
 describe("LoginForm", () => {
   it("renders email, password and submit button", () => {

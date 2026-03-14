@@ -2,8 +2,8 @@
 
 import { Container, Paper, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
-import LoginForm from "./LoginForm";
-import type { LoginRequest } from "@/lib/api/types/auth";
+import LoginForm from "@/components/forms/LoginForm";
+import type { LoginRequest } from "@/types/auth";
 
 async function loginRequest(values: LoginRequest) {
   const response = await fetch("/api/auth/login", {

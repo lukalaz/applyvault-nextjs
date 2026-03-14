@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import type { LoginRequest } from "@/lib/api/types/auth";
-import { mockLogin } from "@/lib/api/mocks/mockLogin";
+import type { LoginRequest } from "@/types/auth";
+import { mockLogin } from "@/test/mocks";
 
 export async function POST(request: Request) {
   const body = (await request.json()) as LoginRequest;

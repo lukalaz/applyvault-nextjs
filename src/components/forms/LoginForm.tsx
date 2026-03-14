@@ -11,7 +11,7 @@ import {
   TextField,
 } from "@mui/material";
 import { Email, Lock } from "@mui/icons-material";
-import type { LoginRequest } from "@/lib/api/types/auth";
+import type { LoginRequest } from "@/types/auth";
 
 type LoginFormProps = {
   onSubmit: (values: LoginRequest) => Promise<void>;
