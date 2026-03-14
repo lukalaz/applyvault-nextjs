@@ -16,7 +16,7 @@ import {
 import Link from "next/link";
 import { ApplicationStatus, getStatusLabel } from "@/domain/jobApplications";
 import { useState } from "react";
-import { createJobApplicationAction } from "./actions";
+import { createJobApplicationAction } from "../actions";
 
 export default function JobApplicationCreateForm() {
   const [error, setError] = useState<string | null>(null);
