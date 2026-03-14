@@ -1,4 +1,4 @@
-import { fetchJson } from "./client";
+import { api, fetchJson } from "./client";
 import type {
   JobApplicationResponseDto,
   CreateJobApplicationRequestDto,
@@ -22,23 +22,18 @@ export const jobApplicationsApi = {
   },
 
   async create(dto: CreateJobApplicationRequestDto) {
-    return fetchJson<JobApplicationResponseDto>("/api/job-applications", {
-      method: "POST",
-      body: JSON.stringify(dto),
-    });
+    return api.post<JobApplicationResponseDto>("/api/job-applications", dto);
   },
 
   async update(id: string, dto: UpdateJobApplicationRequestDto) {
-    return fetchJson<JobApplicationResponseDto>(`/api/job-applications/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(dto),
-    });
+    return api.put<JobApplicationResponseDto>(
+      `/api/job-applications/${id}`,
+      dto,
+    );
   },
 
   async remove(id: string) {
-    return fetchJson<void>(`/api/job-applications/${id}`, {
-      method: "DELETE",
-    });
+    return api.delete<void>(`/api/job-applications/${id}`);
   },
 
   tags: {

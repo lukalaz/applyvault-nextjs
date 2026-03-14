@@ -47,5 +47,38 @@ export async function fetchJson<T>(
     throw new ApiError(message, response.status, problem);
   }
 
-  return response.json() as Promise<T>;
+  const text = await response.text();
+  return (text ? JSON.parse(text) : undefined) as T;
 }
+
+type FetchOptions = Omit<FetchJsonOptions, "method" | "body">;
+
+export const api = {
+  get<T>(path: string, options?: FetchOptions) {
+    return fetchJson<T>(path, { ...options, method: "GET" });
+  },
+  post<T>(path: string, body?: unknown, options?: FetchOptions) {
+    return fetchJson<T>(path, {
+      ...options,
+      method: "POST",
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  },
+  put<T>(path: string, body: unknown, options?: FetchOptions) {
+    return fetchJson<T>(path, {
+      ...options,
+      method: "PUT",
+      body: JSON.stringify(body),
+    });
+  },
+  patch<T>(path: string, body: unknown, options?: FetchOptions) {
+    return fetchJson<T>(path, {
+      ...options,
+      method: "PATCH",
+      body: JSON.stringify(body),
+    });
+  },
+  delete<T>(path: string, options?: FetchOptions) {
+    return fetchJson<T>(path, { ...options, method: "DELETE" });
+  },
+};
