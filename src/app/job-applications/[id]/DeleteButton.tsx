@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@mui/material";
+import { useToast } from "@/hooks";
 import ConfirmDialog from "@/components/dialogs/ConfirmDialog";
 import { deleteJobApplicationAction } from "../actions";
 
@@ -12,13 +14,18 @@ type DeleteButtonProps = {
 export default function DeleteButton({ id }: DeleteButtonProps) {
   const [open, setOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const { toastSuccess, toastError } = useToast();
+  const router = useRouter();
 
   async function handleDelete() {
     setIsDeleting(true);
-    try {
-      await deleteJobApplicationAction(id);
-    } catch (e) {
-      console.error("Failed to delete:", e);
+    const result = await deleteJobApplicationAction(id);
+
+    if (result.success) {
+      toastSuccess("Application deleted!");
+      router.push("/job-applications");
+    } else {
+      toastError(result.error);
       setIsDeleting(false);
       setOpen(false);
     }

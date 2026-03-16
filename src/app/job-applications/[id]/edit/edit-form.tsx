@@ -11,17 +11,17 @@ import {
   MenuItem,
   FormControlLabel,
   Checkbox,
-  Alert,
 } from "@mui/material";
 import Link from "next/link";
-import { ApiError } from "@/lib/api/errors";
+import { useRouter } from "next/navigation";
 import {
   ApplicationStatus,
   getStatusLabel,
   JobApplicationResponseDto,
 } from "@/domain/jobApplications";
-import { updateJobApplicationAction } from "../../actions";
+import { updateJobApplicationAction } from "./actions";
 import { useState } from "react";
+import { useToast } from "@/hooks";
 
 type Props = {
   item: JobApplicationResponseDto;
@@ -29,21 +29,19 @@ type Props = {
 };
 
 export default function JobApplicationEditPageContent({ item, id }: Props) {
-  const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toastSuccess, toastError } = useToast();
+  const router = useRouter();
 
   async function handleSubmit(formData: FormData) {
-    setError(null);
     setIsSubmitting(true);
-    try {
-      await updateJobApplicationAction(id, formData);
-    } catch (e) {
-      if (e instanceof ApiError) {
-        setError(e.message);
-      } else {
-        setError("An unexpected error occurred");
-      }
-    } finally {
+    const result = await updateJobApplicationAction(id, formData);
+
+    if (result.success) {
+      toastSuccess("Application updated!");
+      router.push(`/job-applications/${id}`);
+    } else {
+      toastError(result.error);
       setIsSubmitting(false);
     }
   }
@@ -53,12 +51,6 @@ export default function JobApplicationEditPageContent({ item, id }: Props) {
       <Typography variant="h4" fontWeight={800} gutterBottom>
         Edit: {item.role}
       </Typography>
-
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      )}
 
       <Paper sx={{ p: 3 }}>
         <form action={handleSubmit}>

@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { jobApplicationsApi } from "@/lib/api/jobApplications";
 import {
@@ -9,10 +8,14 @@ import {
 } from "@/domain/jobApplications";
 import { ApiError } from "@/lib/api/errors";
 
+export type ActionResult =
+  | { success: true }
+  | { success: false; error: string };
+
 export async function updateJobApplicationAction(
   id: string,
   formData: FormData,
-) {
+): Promise<ActionResult> {
   const dto: UpdateJobApplicationRequestDto = {
     role: (formData.get("role") as string) || "",
     company: (formData.get("company") as string) || "",
@@ -34,11 +37,11 @@ export async function updateJobApplicationAction(
     await jobApplicationsApi.update(id, dto);
     revalidatePath("/job-applications");
     revalidatePath(`/job-applications/${id}`);
-    redirect(`/job-applications/${id}`);
+    return { success: true };
   } catch (e) {
     if (e instanceof ApiError) {
-      throw new Error(e.message);
+      return { success: false, error: e.message };
     }
-    throw e;
+    return { success: false, error: "An unexpected error occurred" };
   }
 }

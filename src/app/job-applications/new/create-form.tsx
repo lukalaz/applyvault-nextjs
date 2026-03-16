@@ -11,27 +11,28 @@ import {
   MenuItem,
   FormControlLabel,
   Checkbox,
-  Alert,
 } from "@mui/material";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ApplicationStatus, getStatusLabel } from "@/domain/jobApplications";
 import { useState } from "react";
+import { useToast } from "@/hooks";
 import { createJobApplicationAction } from "../actions";
 
 export default function JobApplicationCreateForm() {
-  const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toastSuccess, toastError } = useToast();
+  const router = useRouter();
 
   async function handleSubmit(formData: FormData) {
-    setError(null);
     setIsSubmitting(true);
-    try {
-      await createJobApplicationAction(formData);
-    } catch (e: unknown) {
-      const message =
-        e instanceof Error ? e.message : "An unexpected error occurred";
-      setError(message);
-    } finally {
+    const result = await createJobApplicationAction(formData);
+
+    if (result.success) {
+      toastSuccess("Application created!");
+      router.push("/job-applications");
+    } else {
+      toastError(result.error);
       setIsSubmitting(false);
     }
   }
@@ -41,11 +42,6 @@ export default function JobApplicationCreateForm() {
       <Typography variant="h4" fontWeight={800} gutterBottom>
         New Application
       </Typography>
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      )}
       <Paper sx={{ p: 3 }}>
         <form action={handleSubmit}>
           <Stack spacing={2.5}>
